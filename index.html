@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .login-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" id="submitBtn">Login</button>
+        </form>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <div class="links">
+            <a href="#" onclick="showRegister()">Create Account</a> | 
+            <a href="#" onclick="clearToken()">Clear Login Session</a>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in and validate token
+        async function checkExistingLogin() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                console.log('Found existing token, validating...');
+                try {
+                    const response = await fetch('/dashboard', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Token valid, showing dashboard option');
+                        showAlreadyLoggedIn();
+                        return;
+                    } else {
+                        console.log('Token invalid, clearing and staying on login');
+                        localStorage.removeItem('token');
+                    }
+                } catch (error) {
+                    console.error('Token validation error:', error);
+                    localStorage.removeItem('token');
+                }
+            }
+        }
+
+        // Show logout message if user just logged out
+        function showLogoutMessageIfAny() {
+            const logoutMsg = localStorage.getItem('logoutMessage');
+            if (logoutMsg) {
+                showMessage(logoutMsg, 'success');
+                localStorage.removeItem('logoutMessage');
+            }
+        }
+
+
+        function showAlreadyLoggedIn() {
+            const loginForm = document.querySelector('.login-form');
+            loginForm.innerHTML = `
+                <h2>Already Logged In</h2>
+                <p>You are already logged in as a user.</p>
+                <button onclick="goToDashboard()" style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-bottom: 10px;">Go to Dashboard</button>
+                <button onclick="clearToken()" style="width: 100%; padding: 12px; background-color: #f44336; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">Logout & Login Again</button>
+            `;
+        }
+
+        function goToDashboard() {
+            window.location.href = '/dashboard.html';
+        }
+
+        // Check existing login on page load
+        checkExistingLogin();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+            messageDiv = document.getElementById('message');
+
+            // If a logout message was set, show it now
+            showLogoutMessageIfAny();
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (!username || !password) {
+                    showMessage('Please enter both username and password', 'error');
+                    return;
+                }
+
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Logging in...';
+
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+                    });
+
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (parseError) {
+                        console.error('JSON parse error:', parseError);
+                        showMessage('Server returned invalid response', 'error');
+                        return;
+                    }
+
+                    if (response.ok) {
+                        // Store token and redirect
+                        localStorage.setItem('token', data.token);
+                        showMessage(data.message, 'success');
+
+                        setTimeout(() => {
+                            window.location.href = data.redirect || '/dashboard.html';
+                        }, 1000);
+                    } else {
+                        showMessage(data.message || 'Login failed', 'error');
+                    }
+                } catch (error) {
+                    console.error('Network error:', error);
+                    showMessage('Network error. Please check your connection and try again.', 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Login';
+                }
+            });
+
+            // If a logout message was set, show it now
+            showLogoutMessageIfAny();
+        });
+
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+
+        function showRegister() {
+            // For now, just show an alert. You can implement registration form later
+            alert('Registration form coming soon!');
+        }
+
+        function clearToken() {
+            localStorage.removeItem('token');
+            alert('Login session cleared! You can now login again.');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
