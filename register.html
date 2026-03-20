@@ -116,7 +116,10 @@
 
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" placeholder="Enter password" required>
+                <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Enter password" required>
+                 <span class="toggle-btn" onclick="togglePassword('password', this)"><i class="fa-solid fa-eye-slash"></i></span>
+                 </div>
             </div>
 
             <div class="form-group password-group">
@@ -139,19 +142,20 @@
     const form = document.querySelector("form");
 
     function togglePassword(fieldId, element) {
-    const input = document.getElementById(fieldId);
-    const icon = element.querySelector("i");
+        const input = document.getElementById(fieldId);
+        const icon = element.querySelector("i");
 
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.add("fa-eye");
-        icon.classList.remove("fa-eye-slash");
-    } else {
-        input.type = "password";
-        icon.classList.add("fa-eye-slash");
-        icon.classList.remove("fa-eye");
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.add("fa-eye");
+            icon.classList.remove("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.add("fa-eye-slash");
+            icon.classList.remove("fa-eye");
+        }
     }
-}
+    
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 

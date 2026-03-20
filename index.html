@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,6 +87,24 @@
         .links a:hover {
             text-decoration: underline;
         }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 40px;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -92,13 +112,16 @@
         <h2>Login</h2>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Enter password" required>
+                 <span class="toggle-btn" onclick="togglePassword('password', this)"><i class="fa-solid fa-eye-slash"></i></span>
+                 </div>
             </div>
 
             <button type="submit" id="submitBtn">Login</button>
@@ -114,6 +137,22 @@
 
     <script>
         // Check if already logged in and validate token
+
+        function togglePassword(fieldId, element) {
+            const input = document.getElementById(fieldId);
+            const icon = element.querySelector("i");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.add("fa-eye");
+                icon.classList.remove("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.add("fa-eye-slash");
+                icon.classList.remove("fa-eye");
+            }
+        }
+        
         async function checkExistingLogin() {
             const token = localStorage.getItem('token');
             if (token) {
