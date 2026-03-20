@@ -50,7 +50,9 @@
         <p><strong>Username:</strong> <span id="username">-</span></p>
         <p><strong>User ID:</strong> <span id="user-id">-</span></p>
         <p><strong>Login Time:</strong> <span id="login-time">-</span></p>
-        <p><strong>Token:</strong> <span id="token-value" style="word-break: break-all;">-</span></p>
+        
+        <!-- Display token for debugging purposes (optional) -->
+        <!-- <p><strong>Token:</strong> <span id="token-value" style="word-break: break-all;">-</span></p> -->
 
         <button class="logout-btn" onclick="logout()" id="logoutBtn">Logout</button>
     </div>
@@ -102,10 +104,10 @@
             }
 
             // Display token for debugging
-            const tokenValueEl = document.getElementById('token-value');
-            if (tokenValueEl) {
-                tokenValueEl.textContent = token;
-            }
+            // const tokenValueEl = document.getElementById('token-value');
+            // if (tokenValueEl) {
+            //     tokenValueEl.textContent = token;
+            // }
 
             validateToken(token).then(isValid => {
                 if (isValid) {
