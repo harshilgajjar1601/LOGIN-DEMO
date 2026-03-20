@@ -1,7 +1,7 @@
 {
   "name": "Login-form",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the simple login form using Node.js, Express, MySQL, and JWT for authentication. It allows users to register, log in, and access a protected dashboard. The application securely handles user credentials and sessions using bcrypt for password hashing and JWT for token-based authentication.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

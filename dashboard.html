@@ -159,8 +159,15 @@
                     const data = await response.json();
                     document.getElementById('welcome-message').textContent = data.message;
                     document.getElementById('username').textContent = data.user.username;
-                    document.getElementById('user-id').textContent = data.user.id;
-                    document.getElementById('login-time').textContent = new Date().toLocaleString();
+                    document.getElementById('user-id').textContent = data.user.id; 
+                    document.getElementById('login-time').textContent = new Date().toLocaleString('en-IN', { 
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true});
                 } else {
                     // Token invalid, redirect to login
                     console.log('Dashboard load failed, token invalid');
