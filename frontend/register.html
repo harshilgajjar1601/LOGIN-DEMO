@@ -140,6 +140,7 @@
 
     <script>
     const form = document.querySelector("form");
+    const BASE_URL = "";
 
     function togglePassword(fieldId, element) {
         const input = document.getElementById(fieldId);
@@ -169,7 +170,7 @@
         }
 
         try {
-            const response = await fetch('/register', {
+            const response = await fetch(`${BASE_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
