@@ -1,67 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
-    <!-- <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .dashboard-header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .user-info {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .logout-btn {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .logout-btn:hover {
-            background-color: #d32f2f;
-        }
-    </style> -->
-</head>
-<body>
-    <div class="dashboard-header">
-        <h1>Dashboard</h1>
-        <p id="welcome-message">Loading...</p>
-    </div>
-
-    <div class="user-info">
-        <h2>User Information</h2>
-        <p><strong>Username:</strong> <span id="username">-</span></p>
-        <p><strong>User ID:</strong> <span id="user-id">-</span></p>
-        <p><strong>Login Time:</strong> <span id="login-time">-</span></p>
-        
-        <!-- Display token for debugging purposes (optional) -->
-        <!-- <p><strong>Token:</strong> <span id="token-value" style="word-break: break-all;">-</span></p> -->
-
-        <button class="logout-btn" onclick="logout()" id="logoutBtn">Logout</button>
-    </div>
-
-    <script src="dashboard.js"></script>
-    <!-- <script>
-
-        const BASE_URL = "";
+       const BASE_URL = "";
         // Logout function
         async function logout() {
             console.log('=== LOGOUT STARTED ===');
@@ -184,6 +121,3 @@
                 window.location.href = 'index.html';
             }
         }
-    </script> -->
-</body>
-</html>
