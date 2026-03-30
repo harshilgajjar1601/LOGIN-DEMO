@@ -86,7 +86,7 @@ app.post('/login', (req, res) => {
             );
 
             res.json({
-                message: 'Login successful!',
+                message: 'Login successful! Redirecting to dashboard...',
                 token,
                 redirect: 'dashboard.html'
             });
